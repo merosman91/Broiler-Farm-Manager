@@ -1,4 +1,3 @@
->>> filename: src/styles.css
 :root{--accent:#f59e0b;--muted:#6b7280}
 *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
 body{margin:0;background:#fff7e6;color:#1f2937}
