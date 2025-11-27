@@ -1,4 +1,3 @@
->>> filename: src/App.jsx
 import React, { useEffect, useState } from 'react'
 import Dashboard from './components/Dashboard'
 import BatchForm from './components/BatchForm'
