@@ -1,5 +1,3 @@
->>> filename: src/lib/db.js
-// IndexedDB helper using idb
 import { openDB } from 'idb'
 
 const DB_NAME = 'shamsin-db'
