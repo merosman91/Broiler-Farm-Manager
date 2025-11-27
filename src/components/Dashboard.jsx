@@ -1,4 +1,3 @@
->>> filename: src/components/Dashboard.jsx
 import React, {useMemo, useState, useEffect} from 'react'
 import { getBatch, saveRecord, getRecords } from '../lib/db'
 
