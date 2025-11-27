@@ -1,29 +1,48 @@
-// src/components/ui/MortalityModal.jsx
-import { useState } from "react";
-import BaseModal from "./BaseModal";
+import { useState } from "react"
+import BaseModal from "./BaseModal"
 
 export default function MortalityModal({ open, onClose, onSave }) {
-  const [count, setCount] = useState("");
+  const [count, setCount] = useState("")
+
+  const handleSave = () => {
+    if (!count || isNaN(count) || parseInt(count) < 0) {
+      alert("يرجى إدخال عدد صحيح")
+      return
+    }
+    onSave(parseInt(count))
+    setCount("")
+    onClose()
+  }
 
   return (
     <BaseModal open={open} onClose={onClose} title="تسجيل النفوق">
       <input
         type="number"
-        className="w-full border p-2 rounded-xl mb-3"
+        className="modal-input"
         placeholder="عدد النفوق"
         value={count}
         onChange={(e) => setCount(e.target.value)}
+        onKeyPress={(e) => e.key === 'Enter' && handleSave()}
       />
-
+      
       <button
-        onClick={() => {
-          onSave(count);
-          onClose();
-        }}
-        className="w-full py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition"
+        onClick={handleSave}
+        className="modal-save-btn mortality"
       >
-        حفظ
+        حفظ النفوق
       </button>
     </BaseModal>
-  );
+  )
 }
+
+const mortalityModalStyles = `
+.modal-save-btn.mortality {
+  background: #ef4444;
+}
+`
+
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style')
+  style.textContent = mortalityModalStyles
+  document.head.appendChild(style)
+        }
