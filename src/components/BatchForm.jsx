@@ -1,4 +1,3 @@
->>> filename: src/components/BatchForm.jsx
 import React, {useState, useEffect} from 'react'
 import { addBatch as dbAddBatch, getBatch as dbGetBatch } from '../lib/db'
 
