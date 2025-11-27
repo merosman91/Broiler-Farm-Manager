@@ -305,3 +305,73 @@ tr:nth-child(even) {
     flex-direction: column;
   }
     }
+/* أزرار التصدير والمشاركة */
+.export-btn, .share-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  margin-bottom: 8px;
+}
+
+.export-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.export-btn:hover {
+  background: #dc2626;
+}
+
+.share-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.share-btn.whatsapp {
+  background: #25D366;
+  color: white;
+}
+
+.share-btn.telegram {
+  background: #0088cc;
+  color: white;
+}
+
+.share-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* تحسينات للأزرار في النوافذ */
+.modal-save-btn.expense {
+  background: #f59e0b;
+}
+
+.modal-save-btn.labor {
+  background: #3b82f6;
+}
+
+.modal-save-btn.vet {
+  background: #10b981;
+}
+
+.modal-save-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 8px;
+}
+
+.modal-save-btn:hover {
+  opacity: 0.9;
+}
