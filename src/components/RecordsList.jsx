@@ -1,4 +1,3 @@
->>> filename: src/components/RecordsList.jsx
 import React, {useEffect, useState} from 'react'
 import { getBatches, getRecords } from '../lib/db'
 
