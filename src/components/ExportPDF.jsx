@@ -1,4 +1,3 @@
->>> filename: src/components/ExportPDF.jsx
 import React from 'react'
 import { getBatch, getRecords } from '../lib/db'
 import jsPDF from 'jspdf'
