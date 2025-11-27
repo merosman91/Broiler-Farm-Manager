@@ -1,29 +1,49 @@
-// src/components/ui/WeightModal.jsx
-import { useState } from "react";
-import BaseModal from "./BaseModal";
+import { useState } from "react"
+import BaseModal from "./BaseModal"
 
 export default function WeightModal({ open, onClose, onSave }) {
-  const [weight, setWeight] = useState("");
+  const [weight, setWeight] = useState("")
+
+  const handleSave = () => {
+    if (!weight || isNaN(weight) || parseFloat(weight) <= 0) {
+      alert("يرجى إدخال وزن صحيح")
+      return
+    }
+    onSave(parseFloat(weight))
+    setWeight("")
+    onClose()
+  }
 
   return (
     <BaseModal open={open} onClose={onClose} title="تسجيل الوزن">
       <input
         type="number"
-        className="w-full border p-2 rounded-xl mb-3"
+        step="1"
+        className="modal-input"
         placeholder="متوسط الوزن (جرام)"
         value={weight}
         onChange={(e) => setWeight(e.target.value)}
+        onKeyPress={(e) => e.key === 'Enter' && handleSave()}
       />
-
+      
       <button
-        onClick={() => {
-          onSave(weight);
-          onClose();
-        }}
-        className="w-full py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
+        onClick={handleSave}
+        className="modal-save-btn weight"
       >
-        حفظ
+        حفظ الوزن
       </button>
     </BaseModal>
-  );
+  )
 }
+
+const weightModalStyles = `
+.modal-save-btn.weight {
+  background: #3b82f6;
+}
+`
+
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style')
+  style.textContent = weightModalStyles
+  document.head.appendChild(style)
+        }
