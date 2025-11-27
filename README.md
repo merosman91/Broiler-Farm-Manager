@@ -1,4 +1,4 @@
->>> filename: README.md
+
 # شمسين — Broiler Farm Manager (React + PWA) — نسخة مطورة
 
 هذه النسخة تضيف:
