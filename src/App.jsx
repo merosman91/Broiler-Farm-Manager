@@ -74,35 +74,21 @@ export default function App() {
       </header>
 
       <main>
-        <section className="left">
-          <BatchForm 
-            addBatch={handleAddBatch}
-            activeBatchId={state.activeBatchId}
-            batches={state.batches}
-            setActiveBatchId={(id) => dispatch({ type: 'SET_ACTIVE_BATCH', payload: id })}
-          />
-          <RecordsList 
-            batches={state.batches}
-            activeBatchId={state.activeBatchId}
-          />
-          
-          {/* جرب المكون التجريبي أولاً */}
-          <TestFinancialManager activeBatchId={state.activeBatchId} />
-          
-          {/* ثم المكون الحقيقي */}
-          <FinancialManager activeBatchId={state.activeBatchId} />
-        </section>
+       <section className="left">
+       <BatchForm ... />
+    <RecordsList ... />
+    <FinancialManager activeBatchId={state.activeBatchId} /> {/* ✅ الجديد */}
+  </section>
 
-        <section className="right">
-          <Dashboard 
-            batches={state.batches}
-            activeBatchId={state.activeBatchId}
-          />
-          <WeightChart activeBatchId={state.activeBatchId} />
-          <ExportPDF activeBatchId={state.activeBatchId} />
-          <ShareButtons activeBatchId={state.activeBatchId} />
-        </section>
-      </main>
+  <section className="right">
+    <Dashboard ... />
+    <WeightChart ... />
+    
+    {/* ✅ نقلت للأسفل */}
+    <ExportPDF activeBatchId={state.activeBatchId} />
+    <ShareButtons activeBatchId={state.activeBatchId} /> {/* ✅ الجديد */}
+  </section>
+</main>
 
       <footer className="app-footer">
         © شمسين — نظام إدارة مزارع الدواجن {new Date().getFullYear()}
