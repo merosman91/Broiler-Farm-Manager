@@ -3,6 +3,28 @@ import { getBatch, getRecords } from '../lib/db'
 import jsPDF from 'jspdf'
 import { formatDate, calcCycleDay } from '../lib/dateUtils'
 
+// دعم النصوص العربية
+const arabicText = {
+  title: 'تقرير نهاية الدورة - شمسين',
+  batch: 'الدفعة',
+  chicks: 'عدد الكتاكيت',
+  startDate: 'تاريخ البدء',
+  cycleAge: 'عمر الدورة',
+  chickPrice: 'سعر الكتكوت',
+  currentChicks: 'الكتاكيت الحالية',
+  totalMortality: 'إجمالي النفوق',
+  totalFeed: 'إجمالي العلف',
+  lastWeight: 'آخر وزن مسجل',
+  records: 'سجل القياسات',
+  day: 'يوم',
+  feed: 'علف',
+  weight: 'وزن',
+  mortality: 'نفوق',
+  page: 'صفحة',
+  of: 'من',
+  generated: 'تم الإنشاء في'
+}
+
 export default function ExportPDF({ activeBatchId }) {
   async function generatePDF() {
     if (!activeBatchId) {
@@ -21,41 +43,62 @@ export default function ExportPDF({ activeBatchId }) {
         return
       }
 
+      // استخدام خط يدعم العربية
       const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4'
       })
 
-      // إعداد الخطوط والنص العربي
-      doc.setFont('Helvetica')
-      doc.setFontSize(20)
-      doc.setTextColor(245, 158, 11) // لون برتقالي
-      doc.text('تقرير نهاية الدورة - شمسين', 105, 20, { align: 'center' })
-      
-      doc.setFontSize(12)
-      doc.setTextColor(0, 0, 0) // لون أسود
-      
+      // إضافة دعم للغة العربية
+      doc.setLanguage('ar')
+
       // معلومات الدفعة
       const cycleDay = calcCycleDay(batch.start_date)
-      doc.text(`الدفعة: ${batch.breed || 'غير محدد'}`, 14, 40)
-      doc.text(`عدد الكتاكيت: ${batch.chicks}`, 14, 48)
-      doc.text(`تاريخ البدء: ${formatDate(batch.start_date)}`, 14, 56)
-      doc.text(`عمر الدورة: ${cycleDay} يوم`, 14, 64)
-      
-      if (batch.chick_price > 0) {
-        doc.text(`سعر الكتكوت: ${batch.chick_price} جنية`, 14, 72)
-      }
-
-      // إحصائيات
       const totalMortality = records.reduce((sum, r) => sum + (r.mortality || 0), 0)
       const totalFeed = records.reduce((sum, r) => sum + (r.feed || 0), 0)
       const currentChicks = Math.max(0, batch.chicks - totalMortality)
       const mortalityRate = ((totalMortality / batch.chicks) * 100).toFixed(1)
       
-      doc.text(`الكتاكيت الحالية: ${currentChicks}`, 14, 85)
-      doc.text(`إجمالي النفوق: ${totalMortality} (${mortalityRate}%)`, 14, 93)
-      doc.text(`إجمالي العلف: ${totalFeed.toFixed(1)} كجم`, 14, 101)
+      // الحسابات المالية
+      const totalExpenses = (batch.expenses || []).reduce((sum, exp) => sum + (exp.amount || 0), 0)
+      const totalLabor = (batch.labor || []).reduce((sum, labor) => sum + (labor.cost || 0), 0)
+      const totalVet = (batch.veterinarian || []).reduce((sum, vet) => sum + (vet.cost || 0), 0)
+      const totalChicksCost = batch.chicks * (batch.chick_price || 0)
+      const totalCosts = totalChicksCost + totalExpenses + totalLabor + totalVet
+
+      // العنوان
+      doc.setFontSize(20)
+      doc.setTextColor(245, 158, 11)
+      doc.text(arabicText.title, 105, 20, { align: 'center' })
+      
+      doc.setFontSize(12)
+      doc.setTextColor(0, 0, 0)
+      
+      // معلومات الدفعة
+      let yPosition = 40
+      doc.text(`${arabicText.batch}: ${batch.breed || 'غير محدد'}`, 14, yPosition)
+      yPosition += 8
+      doc.text(`${arabicText.chicks}: ${batch.chicks}`, 14, yPosition)
+      yPosition += 8
+      doc.text(`${arabicText.startDate}: ${formatDate(batch.start_date)}`, 14, yPosition)
+      yPosition += 8
+      doc.text(`${arabicText.cycleAge}: ${cycleDay} يوم`, 14, yPosition)
+      yPosition += 8
+      
+      if (batch.chick_price > 0) {
+        doc.text(`${arabicText.chickPrice}: ${batch.chick_price} جنية`, 14, yPosition)
+        yPosition += 8
+      }
+
+      // إحصائيات
+      yPosition += 8
+      doc.text(`${arabicText.currentChicks}: ${currentChicks}`, 14, yPosition)
+      yPosition += 8
+      doc.text(`${arabicText.totalMortality}: ${totalMortality} (${mortalityRate}%)`, 14, yPosition)
+      yPosition += 8
+      doc.text(`${arabicText.totalFeed}: ${totalFeed.toFixed(1)} كجم`, 14, yPosition)
+      yPosition += 8
 
       // آخر وزن مسجل
       const lastWeightRecord = records
@@ -63,36 +106,54 @@ export default function ExportPDF({ activeBatchId }) {
         .sort((a, b) => b.day - a.day)[0]
       
       if (lastWeightRecord) {
-        doc.text(`آخر وزن مسجل: ${lastWeightRecord.avg_weight} جم (يوم ${lastWeightRecord.day})`, 14, 109)
+        doc.text(`${arabicText.lastWeight}: ${lastWeightRecord.avg_weight} جم (${arabicText.day} ${lastWeightRecord.day})`, 14, yPosition)
+        yPosition += 8
       }
+
+      // التكاليف والأرباح
+      yPosition += 8
+      doc.setFontSize(14)
+      doc.text('التكاليف والأرباح:', 14, yPosition)
+      yPosition += 10
+      doc.setFontSize(10)
+      
+      doc.text(`تكلفة الكتاكيت: ${totalChicksCost.toFixed(2)} جنية`, 14, yPosition)
+      yPosition += 6
+      doc.text(`تكاليف العمالة: ${totalLabor.toFixed(2)} جنية`, 14, yPosition)
+      yPosition += 6
+      doc.text(`تكاليف بيطرية: ${totalVet.toFixed(2)} جنية`, 14, yPosition)
+      yPosition += 6
+      doc.text(`مصروفات أخرى: ${totalExpenses.toFixed(2)} جنية`, 14, yPosition)
+      yPosition += 6
+      doc.text(`إجمالي التكاليف: ${totalCosts.toFixed(2)} جنية`, 14, yPosition)
+      yPosition += 8
 
       // سجل القياسات
       doc.setFontSize(14)
-      doc.text('سجل القياسات:', 14, 125)
+      doc.text(`${arabicText.records}:`, 14, yPosition)
+      yPosition += 10
       
-      doc.setFontSize(10)
-      let yPosition = 135
+      doc.setFontSize(8)
       const pageHeight = doc.internal.pageSize.height
       
-      // عرض آخر 30 سجل
-      const recentRecords = records.slice(-30).reverse()
+      // عرض آخر 20 سجل
+      const recentRecords = records.slice(-20).reverse()
       
       recentRecords.forEach(record => {
-        // التحقق من المساحة قبل إضافة نص
         if (yPosition > pageHeight - 20) {
           doc.addPage()
           yPosition = 20
         }
         
         const recordText = [
-          `يوم ${record.day}`,
-          record.feed ? `علف: ${record.feed}كجم` : null,
-          record.avg_weight ? `وزن: ${record.avg_weight}جم` : null,
-          record.mortality ? `نفوق: ${record.mortality}` : null
+          `${arabicText.day} ${record.day}`,
+          record.feed ? `${arabicText.feed}: ${record.feed}كجم` : null,
+          record.avg_weight ? `${arabicText.weight}: ${record.avg_weight}جم` : null,
+          record.mortality ? `${arabicText.mortality}: ${record.mortality}` : null
         ].filter(Boolean).join(' - ')
         
         doc.text(recordText, 14, yPosition)
-        yPosition += 6
+        yPosition += 5
       })
 
       // تذييل الصفحة
@@ -102,7 +163,7 @@ export default function ExportPDF({ activeBatchId }) {
         doc.setFontSize(8)
         doc.setTextColor(128, 128, 128)
         doc.text(
-          `صفحة ${i} من ${totalPages} - تم الإنشاء في ${new Date().toLocaleDateString('ar-EG')}`,
+          `${arabicText.page} ${i} ${arabicText.of} ${totalPages} - ${arabicText.generated} ${new Date().toLocaleDateString('ar-EG')}`,
           105,
           pageHeight - 10,
           { align: 'center' }
@@ -126,22 +187,10 @@ export default function ExportPDF({ activeBatchId }) {
       </p>
       <button 
         onClick={generatePDF}
-        style={{
-          width: '100%',
-          padding: '12px',
-          background: '#ef4444',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          fontWeight: '600',
-          transition: 'background 0.2s'
-        }}
-        onMouseOver={(e) => e.target.style.background = '#dc2626'}
-        onMouseOut={(e) => e.target.style.background = '#ef4444'}
+        className="export-btn"
       >
-        تصدير تقرير PDF
+        📄 تصدير تقرير PDF
       </button>
     </div>
   )
-        }
+  }
