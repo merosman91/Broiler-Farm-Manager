@@ -1,0 +1,16 @@
+>>> filename: NOTES.txt
+- هذا تحديث أولي — بعض وظائف واجهة المستخدم لا تزال بسيطة (dialogs prompts). يمكن استبدالها بنوافذ مودال وتحسين UX.
+- إذا تريد أعمل لك ملف ZIP جاهز للتحميل أو أرفع المشروع إلى GitHub مع ملف نشر على Vercel.
+
+## UI Modals Added
+
+### Updated: Professional Styled Modals (Tailwind + Animation)
+Below are upgraded modal components with:
+- Centered layout
+- Fade + scale animation
+- Tailwind-based glass effect
+- Responsive design
+
+### New Components Added:
+
+```jsx
