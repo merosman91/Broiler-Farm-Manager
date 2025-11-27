@@ -1,4 +1,3 @@
->>> filename: src/components/WeightChart.jsx
 import React, {useEffect, useState} from 'react'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { getRecords } from '../lib/db'
