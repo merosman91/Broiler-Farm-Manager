@@ -1,10 +1,13 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App'
-import './styles.css'
+import App from './App.jsx'
+import { FarmProvider } from './context/FarmContext.jsx'
+import './styles/index.css'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <FarmProvider>
+      <App />
+    </FarmProvider>
   </React.StrictMode>
 )
