@@ -375,3 +375,132 @@ tr:nth-child(even) {
 .modal-save-btn:hover {
   opacity: 0.9;
 }
+/* Financial Manager Styles */
+.financial-manager {
+  min-height: 500px;
+}
+
+.financial-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.financial-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-primary { background: #f59e0b; color: white; }
+.btn-success { background: #10b981; color: white; }
+.btn-info { background: #3b82f6; color: white; }
+
+.financial-actions button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+}
+
+.tabs button {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tabs button.active {
+  border-bottom-color: #f59e0b;
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.tab-content {
+  min-height: 300px;
+}
+
+.financial-card {
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.financial-card h5 {
+  margin: 0 0 8px 0;
+  color: #374151;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-item {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 4px solid #f59e0b;
+}
+
+.stat-item.positive { border-left-color: #10b981; }
+.stat-item.negative { border-left-color: #ef4444; }
+
+.stat-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.expense-item, .income-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.category-badge {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* Modal improvements */
+.modal-save-btn.income {
+  background: #10b981;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+      }
