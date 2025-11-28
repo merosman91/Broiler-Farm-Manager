@@ -188,3 +188,20 @@ export async function getRecords(batchId) {
     return []
   }
             }
+// في src/lib/db.js أضف هذه الدالة
+export const deleteBatch = async (ids) => {
+  try {
+    // مثال لحذف من IndexedDB
+    const db = await getDB();
+    const transaction = db.transaction(['records'], 'readwrite');
+    const store = transaction.objectStore('records');
+    
+    const deletePromises = ids.map(id => store.delete(id));
+    await Promise.all(deletePromises);
+    
+    return true;
+  } catch (error) {
+    console.error('Error in deleteBatch:', error);
+    return false;
+  }
+};
