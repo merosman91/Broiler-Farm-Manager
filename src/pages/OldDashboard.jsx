@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import WeightChart from '../components/WeightChart';
 
 export default function Dashboard({ batch, feed, mortality, weights }) {
