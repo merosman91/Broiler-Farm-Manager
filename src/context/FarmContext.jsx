@@ -1,29 +1,75 @@
-// FarmContext.js - أنشئ هذا الملف
+// src/context/FarmContext.jsx
 import React, { createContext, useContext, useReducer } from 'react'
 
 const FarmContext = createContext()
 
-const initialState = {
-  batches: []
+// الدالة لتحميل من localStorage
+function loadFromLocalStorage() {
+  try {
+    const saved = localStorage.getItem('farm_batches')
+    return saved ? JSON.parse(saved) : []
+  } catch (error) {
+    console.error('Error loading from localStorage:', error)
+    return []
+  }
 }
 
+// الدالة للحفظ في localStorage
+function saveToLocalStorage(batches) {
+  try {
+    localStorage.setItem('farm_batches', JSON.stringify(batches))
+  } catch (error) {
+    console.error('Error saving to localStorage:', error)
+  }
+}
+
+// الحالة الابتدائية
+const initialState = {
+  batches: loadFromLocalStorage()
+}
+
+// الـ reducer
 function farmReducer(state, action) {
+  let newState
+  
   switch (action.type) {
     case 'ADD_BATCH':
-      return {
+      newState = {
         ...state,
         batches: [...state.batches, action.payload]
       }
+      break
+      
     case 'UPDATE_BATCH':
-      return {
+      newState = {
         ...state,
-        batches: state.batches.map(b =>
-          b.id === action.payload.id ? action.payload : b
+        batches: state.batches.map(batch =>
+          batch.id === action.payload.id ? action.payload : batch
         )
       }
+      break
+      
+    case 'DELETE_BATCH':
+      newState = {
+        ...state,
+        batches: state.batches.filter(batch => batch.id !== action.payload)
+      }
+      break
+      
+    case 'SET_BATCHES':
+      newState = {
+        ...state,
+        batches: action.payload
+      }
+      break
+      
     default:
       return state
   }
+  
+  // حفظ في localStorage
+  saveToLocalStorage(newState.batches)
+  return newState
 }
 
 export function FarmProvider({ children }) {
@@ -43,46 +89,3 @@ export function useFarm() {
   }
   return context
 }
-// أضف هذه الدوال في FarmContext.js
-function saveToLocalStorage(batches) {
-  try {
-    localStorage.setItem('farm_batches', JSON.stringify(batches))
-  } catch (error) {
-    console.error('Error saving to localStorage:', error)
-  }
-}
-
-function loadFromLocalStorage() {
-  try {
-    const saved = localStorage.getItem('farm_batches')
-    return saved ? JSON.parse(saved) : []
-  } catch (error) {
-    console.error('Error loading from localStorage:', error)
-    return []
-  }
-}
-
-// ثم عدل initialState
-const initialState = {
-  batches: loadFromLocalStorage() // تحميل من التخزين المحلي
-}
-
-// وأضف حفظ بعد كل تحديث
-function farmReducer(state, action) {
-  let newState
-  switch (action.type) {
-    case 'ADD_BATCH':
-      newState = {
-        ...state,
-        batches: [...state.batches, action.payload]
-      }
-      break
-    // ... بقية الحالات
-    default:
-      return state
-  }
-  
-  // حفظ في localStorage بعد كل تحديث
-  saveToLocalStorage(newState.batches)
-  return newState
-        }
