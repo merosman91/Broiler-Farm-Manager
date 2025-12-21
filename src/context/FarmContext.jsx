@@ -43,3 +43,46 @@ export function useFarm() {
   }
   return context
 }
+// أضف هذه الدوال في FarmContext.js
+function saveToLocalStorage(batches) {
+  try {
+    localStorage.setItem('farm_batches', JSON.stringify(batches))
+  } catch (error) {
+    console.error('Error saving to localStorage:', error)
+  }
+}
+
+function loadFromLocalStorage() {
+  try {
+    const saved = localStorage.getItem('farm_batches')
+    return saved ? JSON.parse(saved) : []
+  } catch (error) {
+    console.error('Error loading from localStorage:', error)
+    return []
+  }
+}
+
+// ثم عدل initialState
+const initialState = {
+  batches: loadFromLocalStorage() // تحميل من التخزين المحلي
+}
+
+// وأضف حفظ بعد كل تحديث
+function farmReducer(state, action) {
+  let newState
+  switch (action.type) {
+    case 'ADD_BATCH':
+      newState = {
+        ...state,
+        batches: [...state.batches, action.payload]
+      }
+      break
+    // ... بقية الحالات
+    default:
+      return state
+  }
+  
+  // حفظ في localStorage بعد كل تحديث
+  saveToLocalStorage(newState.batches)
+  return newState
+        }
