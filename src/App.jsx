@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FarmProvider, useFarm } from './FarmContext'
+import { FarmProvider, useFarm } from './context/FarmContext.jsx'
 
 // مكون الدفعة المنفصل
 function BatchForm() {
