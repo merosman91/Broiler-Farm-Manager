@@ -2,7 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import { FarmProvider } from './context/FarmContext.jsx'
-import './src/styles/index.css'
+import './styles/index.css'
 
 // عنصر وسيط لحل مشكلة Double Render
 const StrictModeSafeApp = () => {
